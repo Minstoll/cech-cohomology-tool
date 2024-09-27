@@ -1,4 +1,5 @@
 from collections import deque
+import re
 
 
 class Nerve:
@@ -31,7 +32,7 @@ class Nerve:
 
     @property
     def degree(self) -> int:
-        pass
+        return max({int(k) for k in self.simplices.keys()})
 
     def extend(self, simplex) -> None:
         additions = deque([simplex])
@@ -81,8 +82,8 @@ class Simplex:
     """
 
     def __init__(self, name) -> None:
-        # check name validity here if:
-        # raise ValueError
+        if not re.match(r"^\d+(-\d+)*$", name):
+            raise ValueError("Name must be dash separated integer form! E.g. 0-3-11-8")
         self.verts = name.split("-")
         self.dim = len(self.verts) - 1
         self.name = "-".join([str(v) for v in sorted([int(v) for v in self.verts])])
