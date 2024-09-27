@@ -1,4 +1,4 @@
-from nerve import Nerve, Simplex
+from cech import Nerve, Simplex
 
 s1 = Simplex("0-1-2")
 print(s1)

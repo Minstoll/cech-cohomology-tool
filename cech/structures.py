@@ -1,5 +1,6 @@
 from collections import deque, defaultdict
 import re
+import numpy as np
 
 
 class Nerve:
@@ -60,6 +61,21 @@ class Nerve:
     def __repr__(self) -> str:
         return f"{type(self).__name__}({self._pformat(self._simplices)})"
 
+    def _bdy_map(self, smplx, n) -> list:
+        """
+        Return a list of -1, 1, 0 corresponding to the signs of the n-forms
+        on the n-simplices in an ordered list, when the boundary map is applied
+        to smplx.
+        """
+        ordered_nplx = sorted(self._simplices[n])
+        pass
+
+    def cech_cohomology(self, n) -> int:
+        """
+        Compute k, where the n-th Cech cohomology group of the nerve
+        is isomorphic to R^k.
+        """
+
 
 class Simplex:
     """
@@ -74,7 +90,7 @@ class Simplex:
         Avoids recursively creating many redundant objects at init by using @property
         decorator.
     verts : list of str
-        Set of vertices of the simplex.
+        List of vertices of the simplex, sorted ascending.
     name: str
         A string of ordered, dash separated integers which label the vertices of the
         simplex.
@@ -89,9 +105,10 @@ class Simplex:
     def __init__(self, name) -> None:
         if not re.match(r"^\d+(-\d+)*$", name):
             raise ValueError("Name must be dash separated integer form! E.g. 0-3-11-8")
-        self.verts = name.split("-")
+        verts = name.split("-")
+        self.verts = [str(v) for v in sorted([int(v) for v in verts])]
         self.dim = len(self.verts) - 1
-        self.name = "-".join([str(v) for v in sorted([int(v) for v in self.verts])])
+        self.name = "-".join(self.verts)
 
     @property
     def bdy(self):
@@ -104,7 +121,24 @@ class Simplex:
                 bdy_lst.append(Simplex(bdy_name))
             return bdy_lst
 
+    def __lt__(self, other: object) -> bool:
+        if not isinstance(other, Simplex):
+            raise TypeError(f"Comparison not supported with {type(other).__name__}!")
+        if self.dim != other.dim:
+            raise ValueError("Cannot compare simplices of different dimensions!")
+
+        for v1, v2 in zip(self.verts, other.verts):
+            if int(v1) < int(v2):
+                return True
+            elif int(v1) > int(v2):
+                return False
+            else:
+                continue
+        return False
+
     def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Simplex):
+            return False
         return self.name == other.name
 
     def __repr__(self) -> str:
