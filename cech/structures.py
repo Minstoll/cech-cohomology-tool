@@ -81,7 +81,7 @@ class Nerve:
         Compute the dimension of delta_n, the boundary map that differences
         restrictions of n-forms to acquire (n+1)-forms.
         """
-        mat_rows = [self._bdy_map(s) for s in self._simplices[n + 1]]
+        mat_rows = [self._bdy_map(Simplex(s)) for s in self._simplices[n + 1]]
         mat = np.vstack(mat_rows)
         im_dim = int(np.linalg.matrix_rank(mat))
         ker_dim = len(self._simplices[n]) - im_dim
