@@ -36,6 +36,8 @@ class Nerve:
         return max(self._simplices.keys())
 
     def extend(self, simplex) -> None:
+        if not isinstance(simplex, Simplex):
+            raise TypeError(f"Extension not supported with {type(simplex).__name__}!")
         additions = deque([simplex])
 
         while additions:
@@ -61,20 +63,40 @@ class Nerve:
     def __repr__(self) -> str:
         return f"{type(self).__name__}({self._pformat(self._simplices)})"
 
-    def _bdy_map(self, smplx, n) -> list:
+    def _bdy_map(self, smplx) -> np.ndarray:
         """
         Return a list of -1, 1, 0 corresponding to the signs of the n-forms
         on the n-simplices in an ordered list, when the boundary map is applied
-        to smplx.
+        to give a form on smplx of dimension n + 1.
         """
-        ordered_nplx = sorted(self._simplices[n])
-        pass
+        n_plus = smplx.dim
+        ordered_nplx = sorted([Simplex(name) for name in self._simplices[n_plus - 1]])
+        ret = np.zeros((1, len(ordered_nplx)))
+        for i, bdy_elt in enumerate(smplx.bdy):
+            ret[0, ordered_nplx.index(bdy_elt)] = (-1) ** i
+        return ret
+
+    def _comp_ker_dim(self, n):
+        mat_rows = [self._bdy_map(s) for s in self._simplices[n + 1]]
+        mat = np.vstack(mat_rows)
+        ker_dim = int(np.linalg.matrix_rank(mat))
+        return ker_dim
 
     def cech_cohomology(self, n) -> int:
         """
         Compute k, where the n-th Cech cohomology group of the nerve
         is isomorphic to R^k.
         """
+        match n:
+            case n if n < 0:
+                raise ValueError("n must be a non-negative integer!")
+            case n if n > self.degree:
+                return 0
+            case self.degree:
+                ker_dim = len(self._simplices[n])
+
+            case _:
+                pass
 
 
 class Simplex:
@@ -111,7 +133,7 @@ class Simplex:
         self.name = "-".join(self.verts)
 
     @property
-    def bdy(self):
+    def bdy(self) -> list:
         bdy_lst = []
         if self.dim == 0:
             return bdy_lst
@@ -121,7 +143,7 @@ class Simplex:
                 bdy_lst.append(Simplex(bdy_name))
             return bdy_lst
 
-    def __lt__(self, other: object) -> bool:
+    def __lt__(self, other) -> bool:
         if not isinstance(other, Simplex):
             raise TypeError(f"Comparison not supported with {type(other).__name__}!")
         if self.dim != other.dim:
