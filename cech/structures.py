@@ -76,27 +76,39 @@ class Nerve:
             ret[0, ordered_nplx.index(bdy_elt)] = (-1) ** i
         return ret
 
-    def _comp_ker_dim(self, n):
+    def _comp_im_ker(self, n):
+        """
+        Compute the dimension of delta_n, the boundary map that differences
+        restrictions of n-forms to acquire (n+1)-forms.
+        """
         mat_rows = [self._bdy_map(s) for s in self._simplices[n + 1]]
         mat = np.vstack(mat_rows)
-        ker_dim = int(np.linalg.matrix_rank(mat))
-        return ker_dim
+        im_dim = int(np.linalg.matrix_rank(mat))
+        ker_dim = len(self._simplices[n]) - im_dim
+        return im_dim, ker_dim
 
     def cech_cohomology(self, n) -> int:
         """
         Compute k, where the n-th Cech cohomology group of the nerve
         is isomorphic to R^k.
         """
+        if self.degree == 0 and n >= 0:
+            return len(self._simplices[0])
         match n:
             case n if n < 0:
                 raise ValueError("n must be a non-negative integer!")
             case n if n > self.degree:
                 return 0
             case self.degree:
-                ker_dim = len(self._simplices[n])
-
+                ker_dim = len(self._simplices[self.degree])
+                im_dim_minus, _ = self._comp_im_ker(self.degree - 1)
+            case 0:
+                im_dim_minus = 0
+                _, ker_dim = self._comp_im_ker(0)
             case _:
-                pass
+                _, ker_dim = self._comp_im_ker(n)
+                im_dim_minus, _ = self._comp_im_ker(n - 1)
+        return ker_dim - im_dim_minus
 
 
 class Simplex:
