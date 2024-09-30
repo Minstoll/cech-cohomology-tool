@@ -35,7 +35,7 @@ class Nerve:
     def degree(self) -> int:
         return max(self._simplices.keys())
 
-    def extend(self, simplex) -> None:
+    def extend(self, simplex, hollow=False) -> None:
         if not isinstance(simplex, Simplex):
             raise TypeError(f"Extension not supported with {type(simplex).__name__}!")
         additions = deque([simplex])
@@ -47,6 +47,26 @@ class Nerve:
                 if bdy_elt not in additions:
                     additions.append(bdy_elt)
             self._simplices[n].add(smplx.name)
+
+        if hollow:
+            self.remove(simplex)
+
+    def delete(self, simplex) -> None:
+        pass
+
+    def add(self, simplex) -> None:
+        pass
+
+    def remove(self, simplex) -> None:
+        if not isinstance(simplex, Simplex):
+            raise TypeError(f"Deletion not supported with {type(simplex).__name__}!")
+        n = simplex.dim
+        if simplex.name in self._simplices[n]:
+            self._simplices[n].remove(simplex.name)
+            if not self._simplices[n]:
+                self._simplices.pop(n, None)
+        else:
+            raise ValueError("Simplex not found in nerve!")
 
     def _pformat(self, dict_data, ind=1):
         ret_str = ""
@@ -92,16 +112,17 @@ class Nerve:
         Compute k, where the n-th Cech cohomology group of the nerve
         is isomorphic to R^k.
         """
-        if self.degree == 0 and n >= 0:
+        deg = self.degree
+        if deg == 0 and n >= 0:
             return len(self._simplices[0])
         match n:
             case n if n < 0:
                 raise ValueError("n must be a non-negative integer!")
-            case n if n > self.degree:
+            case n if n > deg:
                 return 0
-            case self.degree:
-                ker_dim = len(self._simplices[self.degree])
-                im_dim_minus, _ = self._comp_im_ker(self.degree - 1)
+            case _ if n == deg:
+                ker_dim = len(self._simplices[deg])
+                im_dim_minus, _ = self._comp_im_ker(deg - 1)
             case 0:
                 im_dim_minus = 0
                 _, ker_dim = self._comp_im_ker(0)
