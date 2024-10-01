@@ -1,4 +1,5 @@
 from collections import deque, defaultdict
+from itertools import combinations
 import re
 import numpy as np
 
@@ -141,6 +142,23 @@ class Nerve:
             if not self._simplices[k]:
                 self._simplices.pop(k, None)
 
+    def fill(self, dim) -> None:
+        """
+        If all boundaries of a dim-dimensional simplex are present, add the interior
+        of the simplex to the nerve.
+        """
+        for comb in combinations(range(len(self._simplices[0])), r=dim):
+            add = True
+            for i, _ in enumerate(comb):
+                if (
+                    Simplex("-".join(comb[:i] + comb[i + 1 :])).name
+                    not in self._simplices[dim - 1]
+                ):
+                    add = False
+                    break
+            if add:
+                self._simplices[dim].add(Simplex("-".join(comb)).name)
+
     def cech_cohomology(self, n) -> int:
         """
         Compute k, where the n-th Cech cohomology group of the nerve
@@ -169,12 +187,6 @@ class Nerve:
         if not isinstance(other, Nerve):
             return False
         return self._simplices == other._simplices
-        # if self.degree == other.degree:
-        #    for d in range(self.degree + 1):
-        #        if self._simplices[d] != other._simplices[d]:
-        #            return False
-        #    return True
-        # return False
 
 
 class Simplex:
