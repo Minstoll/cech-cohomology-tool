@@ -147,7 +147,7 @@ class Nerve:
         If all boundaries of a dim-dimensional simplex are present, add the interior
         of the simplex to the nerve.
         """
-        for comb in combinations(range(len(self._simplices[0])), r=dim):
+        for comb in combinations(self._simplices[0], r=dim + 1):
             add = True
             for i, _ in enumerate(comb):
                 if (
