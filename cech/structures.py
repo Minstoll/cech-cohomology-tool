@@ -165,6 +165,11 @@ class Nerve:
                 im_dim_minus, _ = self._comp_im_ker(n - 1)
         return ker_dim - im_dim_minus
 
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Simplex):
+            return False
+        return self._simplices == other._simplices
+
 
 class Simplex:
     """
