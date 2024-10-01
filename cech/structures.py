@@ -166,9 +166,15 @@ class Nerve:
         return ker_dim - im_dim_minus
 
     def __eq__(self, other: object) -> bool:
-        if not isinstance(other, Simplex):
+        if not isinstance(other, Nerve):
             return False
         return self._simplices == other._simplices
+        # if self.degree == other.degree:
+        #    for d in range(self.degree + 1):
+        #        if self._simplices[d] != other._simplices[d]:
+        #            return False
+        #    return True
+        # return False
 
 
 class Simplex:
