@@ -96,7 +96,7 @@ class Nerve:
             ret[0, ordered_nplx.index(bdy_elt)] = (-1) ** i
         return ret
 
-    def _comp_im_ker(self, n):
+    def _comp_im_ker(self, n) -> tuple[int]:
         """
         Compute the dimension of delta_n, the boundary map that differences
         restrictions of n-forms to acquire (n+1)-forms.
@@ -106,6 +106,40 @@ class Nerve:
         im_dim = int(np.linalg.matrix_rank(mat))
         ker_dim = len(self._simplices[n]) - im_dim
         return im_dim, ker_dim
+
+    def identify(self, *vs, anchor=None) -> None:
+        """
+        Identify different vertices of the nerve (open sets in the cover)
+        by using the smallest label of the vertices (default, otherwise uses anchor)
+        for all of them, updating simplices accordingly.
+        """
+        if not all([isinstance(v, int) for v in vs]):
+            raise TypeError("Vertices should be entered as integers!")
+
+        if anchor is not None:
+            if not isinstance(anchor, int):
+                raise TypeError("Vertices should be entered as integers!")
+        else:
+            anchor = str(min(vs))
+        v_others = set(map(lambda x: str(x), vs)) - {anchor}
+
+        for k in range(self.degree + 1):
+            for s in self._simplices[k].copy():
+                changed = False
+                s = Simplex(s)
+                s_verts = set(s.verts)
+                for s_vert in s_verts:
+                    if s_vert in v_others:
+                        s_verts.remove(s_vert)
+                        s_verts.add(anchor)
+                        changed = True
+                if changed:
+                    s_new = Simplex("-".join(s_verts))
+                    self._simplices[k].remove(s.name)
+                    self._simplices[s_new.dim].add(s_new.name)
+
+            if not self._simplices[k]:
+                self._simplices.pop(k, None)
 
     def cech_cohomology(self, n) -> int:
         """
