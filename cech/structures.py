@@ -222,9 +222,6 @@ class Nerve:
                 raise ValueError("n must be a non-negative integer!")
             case n if n > deg:
                 return 0
-            case _ if n == deg:
-                ker_dim = len(self._simplices[deg])
-                im_dim_minus, _ = self._comp_im_ker(deg - 1)
             case 0:
                 im_dim_minus = 0
                 _, ker_dim = self._comp_im_ker(0)
@@ -254,6 +251,10 @@ class Nerve:
         return cech_tup
 
     def __eq__(self, other: object) -> bool:
+        """
+        Implement equality between nerves: equal if they contain the same simplices
+        in every dimension.
+        """
         if not isinstance(other, Nerve):
             return False
         return self._simplices == other._simplices
@@ -277,14 +278,10 @@ class Simplex:
         A string of ordered, dash separated integers which label the vertices of the
         simplex.
         If the simplex is a point, this is one integer cast as a string.
-
-    Methods
-    -------
-    __init__(name):
-        Constructor. Set attributes according to the formatted name (see above).
     """
 
     def __init__(self, name) -> None:
+        """Constructor. Set attributes according to the formatted name (see above)."""
         if not re.match(r"^\d+(-\d+)*$", name):
             raise ValueError("Name must be dash separated integer form! E.g. 0-3-11-8")
         verts = name.split("-")
@@ -304,6 +301,10 @@ class Simplex:
             return bdy_lst
 
     def __lt__(self, other) -> bool:
+        """
+        Implement comparison between simplices by comparing the lists of their sorted
+        vertices.
+        """
         if not isinstance(other, Simplex):
             raise TypeError(f"Comparison not supported with {type(other).__name__}!")
         if self.dim != other.dim:
@@ -319,6 +320,9 @@ class Simplex:
         return False
 
     def __eq__(self, other: object) -> bool:
+        """
+        Implement equality between simplices: equal if their name attributes are equal.
+        """
         if not isinstance(other, Simplex):
             return False
         return self.name == other.name
