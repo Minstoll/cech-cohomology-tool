@@ -27,7 +27,10 @@ class Nerve:
 
     @property
     def degree(self) -> int:
-        return max(self._simplices.keys())
+        try:
+            return max(self._simplices.keys())
+        except ValueError:
+            raise ValueError("Cannot compute degree for empty nerve!")
 
     def extend(self, simplex, hollow=False) -> None:
         """
@@ -135,6 +138,9 @@ class Nerve:
         Compute the dimension of delta_n, the boundary map that differences
         restrictions of n-forms to acquire (n+1)-forms.
         """
+        deg = self.degree
+        if n == deg:
+            return 0, len(self._simplices[deg])
         mat_rows = [self._bdy_map(Simplex(s)) for s in self._simplices[n + 1]]
         mat = np.vstack(mat_rows)
         im_dim = int(np.linalg.matrix_rank(mat))
@@ -227,11 +233,25 @@ class Nerve:
                 im_dim_minus, _ = self._comp_im_ker(n - 1)
         return ker_dim - im_dim_minus
 
-    def cech_cohomology_seq(self) -> tuple[int]:
+    def cech_cohomology_seq(self, n=None) -> tuple[int]:
         """
         Compute the dimension of the ith Cech cohomology group, where i runs from 0 to
-        n inclusive. If full is set to True, take n to be the degree of the nerve.
+        n inclusive. If n is not set, take n to be the degree of the nerve.
         """
+        if n is None:
+            n = self.degree
+        elif n < 0:
+            raise ValueError("n must be a non-negative integer!")
+
+        cech_tup = ()
+        im_dim_prev = 0
+        for d in range(n + 1):
+            if d > self.degree:
+                return 0
+            im_dim, ker_dim = self._comp_im_ker(d)
+            cech_tup += (ker_dim - im_dim_prev,)
+            im_dim_prev = im_dim
+        return cech_tup
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Nerve):
