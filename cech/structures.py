@@ -12,21 +12,14 @@ class Nerve:
     ----------
     degree : int
         Dimension of the highest dimensional simplex in the nerve.
-
-    Methods
-    -------
-    __init__(simplices):
-        Constructor. If simplices is not specified, initializes with empty dict.
-        Expects a dict of the form {<dim: int> : {<name of simplex: str>}}, e.g.
-        {0: {'0', '1'}, 1: {'0-1'}}
-    extend(simplex):
-        Extend the nerve by adding the specified simplex as well as subsimplices if
-        they do not yet exist in the nerve.
-    _pformat(dict_data):
-        Pretty print dict_data.
     """
 
     def __init__(self, simplices=None) -> None:
+        """
+        Constructor. If simplices is not specified, initializes with empty dict.
+        Expects a dict of the form {<dim: int> : {<name of simplex: str>}}, e.g.
+        {0: {'0', '1'}, 1: {'0-1'}}
+        """
         if simplices is not None:
             self._simplices = defaultdict(set, simplices)
         else:
@@ -37,6 +30,10 @@ class Nerve:
         return max(self._simplices.keys())
 
     def extend(self, simplex, hollow=False) -> None:
+        """
+        Extend the nerve by adding the specified simplex as well as subsimplices if
+        they do not yet exist in the nerve.
+        """
         if not isinstance(simplex, Simplex):
             raise TypeError(f"Extension not supported with {type(simplex).__name__}!")
         additions = deque([simplex])
@@ -53,14 +50,49 @@ class Nerve:
             self.remove(simplex)
 
     def delete(self, simplex) -> None:
-        pass
-
-    def add(self, simplex) -> None:
-        pass
-
-    def remove(self, simplex) -> None:
+        """
+        Remove the simplex as well as its boundary and any dependent subsimplices.
+        Also remove any higher dimensional simplex for which this simplex forms part of
+        its boundary.
+        """
         if not isinstance(simplex, Simplex):
             raise TypeError(f"Deletion not supported with {type(simplex).__name__}!")
+        deg = self.degree
+        dim = simplex.dim
+        vset = set(simplex.verts)
+        if deg > dim:
+            for d in range(dim + 1, deg):
+                for smplx in self._simplices[d]:
+                    if vset <= set(smplx.verts):
+                        self.remove(smplx)
+
+        deletions = deque([simplex])
+        while deletions:
+            smplx = deletions.popleft()
+            n = smplx.dim
+            for bdy_elt in smplx.bdy:
+                if bdy_elt not in deletions:
+                    deletions.append(bdy_elt)
+            self._simplices[n].remove(smplx.name)
+
+    def add(self, simplex) -> None:
+        """
+        Add a simplex with no additional dependencies. Must ensure any simplex forming
+        its boundary already exists in the nerve. Not recommended, can lead to
+        unintended consequences.
+        """
+        if not isinstance(simplex, Simplex):
+            raise TypeError(f"Addition not supported with {type(simplex).__name__}!")
+        self._simplices[simplex.dim].add(simplex.name)
+
+    def remove(self, simplex) -> None:
+        """
+        Remove the specified simplex from the nerve. Does not affect its boundaries
+        or any subsimplices. Can lead to unintended consequences if this simplex is
+        part of a higher dimensional simplex.
+        """
+        if not isinstance(simplex, Simplex):
+            raise TypeError(f"Removal not supported with {type(simplex).__name__}!")
         n = simplex.dim
         if simplex.name in self._simplices[n]:
             self._simplices[n].remove(simplex.name)
@@ -70,6 +102,7 @@ class Nerve:
             raise ValueError("Simplex not found in nerve!")
 
     def _pformat(self, dict_data, ind=1):
+        """Pretty print dict_data."""
         ret_str = ""
         for k, v in dict_data.items():
             ret_str += (
@@ -159,6 +192,17 @@ class Nerve:
             if add:
                 self._simplices[dim].add(Simplex("-".join(comb)).name)
 
+    def clear(self, dim) -> None:
+        """
+        Remove all dim-dimensional simplices, and consequently all simplices with
+        dimension greater than dim.
+        """
+        deg = self.degree
+        if dim > deg:
+            return
+        for d in range(dim, deg + 1):
+            self._simplices.pop(d, None)
+
     def cech_cohomology(self, n) -> int:
         """
         Compute k, where the n-th Cech cohomology group of the nerve
@@ -182,6 +226,12 @@ class Nerve:
                 _, ker_dim = self._comp_im_ker(n)
                 im_dim_minus, _ = self._comp_im_ker(n - 1)
         return ker_dim - im_dim_minus
+
+    def cech_cohomology_seq(self) -> tuple[int]:
+        """
+        Compute the dimension of the ith Cech cohomology group, where i runs from 0 to
+        n inclusive. If full is set to True, take n to be the degree of the nerve.
+        """
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Nerve):
