@@ -18,19 +18,11 @@
 
 
 <!-- PROJECT LOGO -->
-<br />
-<div align="center">
-  <a href="https://github.com/Minstoll/cech-cohomology-tool">
-  </a>
-
-<h3 align="center">Čech Cohomology from Nerves</h3>
-
-  <p align="center">
-    A small package that computes the Čech cohomology of a good cover of a manifold.
-    <br />
-    <a href="https://github.com/Minstoll/cech-cohomology-tool/blob/main/cech_examples.ipynb">View Demo</a>
-  </p>
-</div>
+# Čech Cohomology from Nerves
+A small package that computes the Čech cohomology of a good cover of a manifold. <a href="https://github.com/Minstoll/cech-cohomology-tool/blob/main/cech_examples.ipynb">View demo here.</a><br />
+Built with:
+* [![Python][Python.org]][Python-url]
+* [![Jupyter][Jupyter.org]][Jupyter-url]
 
 
 
@@ -38,12 +30,7 @@
 <details>
   <summary>Table of Contents</summary>
   <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
+    <li><a href="#about-the-project">About The Project</a></li>
     <li><a href="#usage">Usage</a></li>
     <li>
       <a href="#getting-started">Getting Started</a>
@@ -62,30 +49,14 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-The `cech` package provides tools to compute the Čech cohomology of a finite good cover of a compact manifold. By 'good', we mean that finite intersections of sets in the cover are diffeomorphic to $\mathbb{R}^n.$
-There exists an isomorphism between the de-Rham cohomology of a manifold and Čech cohomology of any of its good covers. So this is an alternative method to compute the de Rham cohomology of a (compact) manifold.
+The `cech` package provides tools to compute the Čech cohomology of a finite good cover of a compact manifold. By 'good', we mean that finite intersections of sets in the cover are diffeomorphic to $\mathbb{R}^n.$ <br />
+There exists an isomorphism between the de-Rham cohomology of a manifold and Čech cohomology of any of its good covers, so this is an alternative method to compute the de Rham cohomology of a (compact) manifold.
 A good cover always exists for a manifold, and for computational purposes we assume the manifold is compact, in which case there exists a finite good cover, though this may not be trivial to find.
 Concretely, given a finite good cover of a compact manifold, we may construct a dual object: a simplicial complex which we call a 'nerve', wherein 0-simplices correspond to sets, 1-simplices to intersecions of two sets,
 2-simplices correspond to intersections of 3 sets and so on. The package provides a suite of tools to encode such a nerve structure, and from this compute the Čech cohomology using combinatorics and linear algebra.
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
-### Built With
-
-* [![Next][Next.js]][Next-url]
-* [![React][React.js]][React-url]
-* [![Vue][Vue.js]][Vue-url]
-* [![Angular][Angular.io]][Angular-url]
-* [![Svelte][Svelte.dev]][Svelte-url]
-* [![Laravel][Laravel.com]][Laravel-url]
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-* [![JQuery][JQuery.com]][JQuery-url]
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
 ## Usage
@@ -191,3 +162,10 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 [Bootstrap-url]: https://getbootstrap.com
 [JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
 [JQuery-url]: https://jquery.com 
+
+[Python.org]: https://img.shields.io/badge/Python-0a5fa3?style=for-the-badge&logo=python&logoColor=white
+[Python-url]: https://jquery.com 
+[Jupyter.org]: https://img.shields.io/badge/Jupyter-4A4A55?style=for-the-badge&logo=jupyter&logoColor=orange
+[Jupyter-url]: https://jquery.com 
+
+
