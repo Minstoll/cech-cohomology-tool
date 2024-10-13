@@ -50,8 +50,10 @@ Built with:
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 The `cech` package provides tools to compute the Čech cohomology of a finite good cover of a compact manifold. By 'good', we mean that finite intersections of sets in the cover are diffeomorphic to $\mathbb{R}^n.$ <br />
+<br />
 There exists an isomorphism between the de-Rham cohomology of a manifold and Čech cohomology of any of its good covers, so this is an alternative method to compute the de Rham cohomology of a (compact) manifold.
-A good cover always exists for a manifold, and for computational purposes we assume the manifold is compact, in which case there exists a finite good cover, though this may not be trivial to find.
+A good cover always exists for a manifold, and for computational purposes we assume the manifold is compact, in which case there exists a finite good cover, though this may not be trivial to find.<br />
+<br />
 Concretely, given a finite good cover of a compact manifold, we may construct a dual object: a simplicial complex which we call a 'nerve', wherein 0-simplices correspond to sets, 1-simplices to intersecions of two sets,
 2-simplices correspond to intersections of 3 sets and so on. The package provides a suite of tools to encode such a nerve structure, and from this compute the Čech cohomology using combinatorics and linear algebra.
 
@@ -60,8 +62,12 @@ Concretely, given a finite good cover of a compact manifold, we may construct a 
 
 <!-- USAGE EXAMPLES -->
 ## Usage
-
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+The goal is to compute the Čech cohomology of a manifold.
+1. <b>Find a good cover</b>: Depending on the manifold, this could be a nontrivial task, and must be carried out manually. The difficulty arises from the requirement for the cover to be good - in particular
+that the intersections between sets in the cover are connected. This can be easily overlooked if we first try to cover a related manifold, then identify certain sets to obtain a cover for the desired manifold.
+2. <b>Construct nerve structure</b>: From the good cover, label each set using a unique integer. Construct a simplicial complex (effectively an n-dimensional graph made of simplices) such that 1-simplices (edges) correspond to intersections of the sets represented by its boundary elements (vertices), 2-simplices represent intersections between 3 sets, etc. The package provides a suite of methods to streamline the creation of such objects:
+   - You could directly enter a dictionary of simplices of every dimension as the first parameter of `Nerve()` during initialization ()
+   - 
 
 _For more examples, please refer to the [Documentation](https://example.com)_
 
