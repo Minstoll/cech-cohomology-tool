@@ -13,7 +13,7 @@
 -->
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
+<!-- [![LinkedIn][linkedin-shield]][linkedin-url] -->
 
 
 
@@ -107,37 +107,35 @@ check out the demo notebook: <a href="https://github.com/Minstoll/cech-cohomolog
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+To install and use the package on your device, follow these instructions:
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
+The only non-built-in dependency is `numpy`. In your local environment, run
   ```sh
-  npm install npm@latest -g
+  python -m pip install numpy
   ```
+to install numpy.
 
 ### Installation
-
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
    ```sh
-   git clone https://github.com/github_username/repo_name.git
+   git clone https://github.com/Minstoll/cech_cohomology_tool.git
    ```
-3. Install NPM packages
+2. Install the package
    ```sh
-   npm install
+   python -m pip install cech
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
+3. Import the package into your workspace
+   ```py
+   import cech
    ```
-5. Change git remote url to avoid accidental pushes to base project
-   ```sh
-   git remote set-url origin github_username/repo_name
-   git remote -v # confirm the changes
+   or
+   ```py
+   from cech import Nerve, Simplex
    ```
+4. Enjoy!
+   
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -156,9 +154,9 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Ping Zhu - ping.zhu@st-hildas.ox.ac.uk
+Email - zhing.pu@gmail.com
 
-Project Link: [https://github.com/github_username/repo_name](https://github.com/Minstoll/cech-cohomology-tool)
+Project Link: [https://github.com/Minstoll/cech-cohomology-tool](https://github.com/Minstoll/cech-cohomology-tool)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -167,9 +165,8 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* []()
-* []()
-* []()
+* [My supervisor](https://sites.google.com/view/yuhansun)
+* [Bott & Tu's textbook](https://books.google.co.uk/books/about/Differential_Forms_in_Algebraic_Topology.html?id=COuPBAAAQBAJ&redir_esc=y)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -181,8 +178,8 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 [issues-url]: https://github.com/Minstoll/cech-cohomology-tool/issues
 [license-shield]: https://img.shields.io/github/license/Minstoll/cech-cohomology-tool.svg?style=for-the-badge
 [license-url]: https://github.com/Minstoll/cech-cohomology-tool/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/ping-zhu
+<!-- [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555 -->
+<!-- [linkedin-url]: https://linkedin.com/in/ -->
 
 [Python.org]: https://img.shields.io/badge/Python-123456?style=for-the-badge&logo=python&logoColor=white
 [Python-url]: https://jquery.com 
