@@ -182,8 +182,8 @@ Project Link: [https://github.com/Minstoll/cech-cohomology-tool](https://github.
 <!-- [linkedin-url]: https://linkedin.com/in/ -->
 
 [Python.org]: https://img.shields.io/badge/Python-123456?style=for-the-badge&logo=python&logoColor=white
-[Python-url]: https://jquery.com 
+[Python-url]: https://www.python.org/
 [Jupyter.org]: https://img.shields.io/badge/Jupyter-4A4A55?style=for-the-badge&logo=jupyter&logoColor=orange
-[Jupyter-url]: https://jquery.com 
+[Jupyter-url]: https://jupyter.org/
 
 
